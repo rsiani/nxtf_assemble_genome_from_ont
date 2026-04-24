@@ -1,6 +1,5 @@
 .nextflow/
-work/
+data/
 *.log
 .conda/
 .micromamba/
-1_024_0.fastq
