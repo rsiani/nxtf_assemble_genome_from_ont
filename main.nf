@@ -159,7 +159,6 @@ process PHAROKKA {
     output:
     path "pharokka_out/pharokka.gff",         emit: pharokka_gff
     path "pharokka_out/pharokka.gbk",         emit: pharokka_gbk
-    path "pharokka_out/pharokka_summary.tsv", emit: pharokka_summary
     path "pharokka_out",                      emit: pharokka_dir
 
     script:
@@ -178,8 +177,6 @@ process PHAROKKA {
     printf '##gff-version 3\\nviral_contig_1\\tpharokka\\tCDS\\t1\\t500\\t.\\t+\\t0\\tID=CDS_1;phrog=phrog_1;function=tail fiber\\n' \
         > pharokka_out/pharokka.gff
     echo "LOCUS viral_contig_1" > pharokka_out/pharokka.gbk
-    printf 'contig\\tCDS\\ttRNA\\ttmRNA\\ncontig_1\\t42\\t2\\t0\\n' \
-        > pharokka_out/pharokka_summary.tsv
     """
 }
 
@@ -193,7 +190,6 @@ process PHOLD {
     path gbk_file
 
     output:
-    path "phold_out/phold_summary.tsv", emit: phold_summary
     path "phold_out/phold.gff",         emit: phold_gff
     path "phold_out/phold.gbk",         emit: phold_gbk
     path "phold_out",                   emit: phold_dir
@@ -213,8 +209,6 @@ process PHOLD {
     printf '##gff-version 3\\nviral_contig_1\\tphold\\tCDS\\t1\\t500\\t.\\t+\\t0\\tID=CDS_1;function=tail fiber protein (3D)\\n' \
         > phold_out/phold.gff
     cp ${gbk_file} phold_out/phold.gbk
-    printf 'contig\\tCDS_total\\tannotated\\thypothetical\\ncontig_1\\t42\\t38\\t4\\n' \
-        > phold_out/phold_summary.tsv
     """
 }
 
@@ -262,8 +256,6 @@ process REPORT {
     path qc_report_json
     path checkv_results
     path taxonomy_report  
-    path pharokka_summary
-    path phold_summary
     // path phynteny_summary
 
     output:
@@ -323,10 +315,7 @@ workflow {
         qc_out.qc_report,
         qc_out.qc_report_json,
         checkv_out.checkv_results,
-        verify_out.taxonomy_report, 
-        pharokka_out.pharokka_summary,
-        phold_out.phold_summary,
-        // phynteny_out.phynteny_summary
+        verify_out.taxonomy_report
     )
 
     report_out.final_report.view { path ->

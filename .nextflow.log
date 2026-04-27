@@ -1,177 +1,92 @@
-Apr-27 23:01:22.936 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf -c nextflow.config --inputFile work/1_024_O.fastq -resume
-Apr-27 23:01:23.079 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
-Apr-27 23:01:23.110 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/robs/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
-Apr-27 23:01:23.141 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
-Apr-27 23:01:23.142 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
-Apr-27 23:01:23.145 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
-Apr-27 23:01:23.161 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
-Apr-27 23:01:23.334 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
-Apr-27 23:01:23.368 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /var/home/robs/project_VEO/nextflow.config
-Apr-27 23:01:23.373 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /var/home/robs/project_VEO/nextflow.config
-Apr-27 23:01:23.374 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /var/home/robs/project_VEO/nextflow.config
-Apr-27 23:01:23.375 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /var/home/robs/project_VEO/nextflow.config
-Apr-27 23:01:23.407 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
-Apr-27 23:01:23.901 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
-Apr-27 23:01:23.953 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
-Apr-27 23:01:23.954 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[]
-Apr-27 23:01:23.970 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/robs/.nextflow/secrets/store.json
-Apr-27 23:01:23.974 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@52bf7bf6] - activable => nextflow.secret.LocalSecretsProvider@52bf7bf6
-Apr-27 23:01:23.978 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
-Apr-27 23:01:23.995 [main] DEBUG nextflow.cli.CmdRun - Launching `main.nf` [sad_kimura] DSL2 - revision: 4107d7ac84
-Apr-27 23:01:24.058 [main] DEBUG nextflow.Session - Session UUID: 67fe8d17-96d7-4156-969b-b83db6b87673
-Apr-27 23:01:24.058 [main] DEBUG nextflow.Session - Run name: sad_kimura
-Apr-27 23:01:24.059 [main] DEBUG nextflow.Session - Executor pool size: 8
-Apr-27 23:01:24.070 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
-Apr-27 23:01:24.076 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-Apr-27 23:01:24.101 [main] DEBUG nextflow.cli.CmdRun - 
+Apr-27 23:15:52.879 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf -c nextflow.config --inputFile work/1_024_O.fastq -resume
+Apr-27 23:15:53.054 [main] DEBUG nextflow.cli.CmdRun - N E X T F L O W  ~  version 25.10.4
+Apr-27 23:15:53.086 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; embedded=false; plugins-dir=/home/robs/.nextflow/plugins; core-plugins: nf-amazon@3.4.4,nf-azure@1.20.2,nf-cloudcache@0.5.0,nf-codecommit@0.5.0,nf-console@1.3.0,nf-google@1.23.5,nf-k8s@1.2.2,nf-tower@1.17.5,nf-wave@1.16.1
+Apr-27 23:15:53.122 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Apr-27 23:15:53.123 [main] INFO  o.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Apr-27 23:15:53.127 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.12.0 in 'deployment' mode
+Apr-27 23:15:53.148 [main] DEBUG nextflow.util.RetryConfig - Missing nextflow session - using default retry config
+Apr-27 23:15:53.350 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Apr-27 23:15:53.385 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /var/home/robs/project_VEO/nextflow.config
+Apr-27 23:15:53.389 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /var/home/robs/project_VEO/nextflow.config
+Apr-27 23:15:53.392 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /var/home/robs/project_VEO/nextflow.config
+Apr-27 23:15:53.393 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /var/home/robs/project_VEO/nextflow.config
+Apr-27 23:15:53.428 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Apr-27 23:15:54.003 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Apr-27 23:15:54.054 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Apr-27 23:15:54.055 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins resolved requirement=[]
+Apr-27 23:15:54.073 [main] DEBUG n.secret.LocalSecretsProvider - Secrets store: /home/robs/.nextflow/secrets/store.json
+Apr-27 23:15:54.077 [main] DEBUG nextflow.secret.SecretsLoader - Discovered secrets providers: [nextflow.secret.LocalSecretsProvider@52bf7bf6] - activable => nextflow.secret.LocalSecretsProvider@52bf7bf6
+Apr-27 23:15:54.082 [main] DEBUG nextflow.cli.CmdRun - Applied DSL=2 by global default
+Apr-27 23:15:54.102 [main] DEBUG nextflow.cli.CmdRun - Launching `main.nf` [pensive_einstein] DSL2 - revision: 9b2b9b50bb
+Apr-27 23:15:54.193 [main] DEBUG nextflow.Session - Session UUID: 67fe8d17-96d7-4156-969b-b83db6b87673
+Apr-27 23:15:54.194 [main] DEBUG nextflow.Session - Run name: pensive_einstein
+Apr-27 23:15:54.195 [main] DEBUG nextflow.Session - Executor pool size: 8
+Apr-27 23:15:54.211 [main] DEBUG nextflow.file.FilePorter - File porter settings maxRetries=3; maxTransfers=50; pollTimeout=null
+Apr-27 23:15:54.221 [main] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'FileTransfer' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+Apr-27 23:15:54.257 [main] DEBUG nextflow.cli.CmdRun - 
   Version: 25.10.4 build 11173
   Created: 10-02-2026 15:17 UTC (16:17 CEST)
   System: Linux 6.19.10-200.fc43.x86_64
   Runtime: Groovy 4.0.28 on OpenJDK 64-Bit Server VM 23.0.2-internal-adhoc.conda.src
   Encoding: UTF-8 (UTF-8)
-  Process: 28344@toolbx [192.168.178.93]
-  CPUs: 8 - Mem: 15.4 GB (2.9 GB) - Swap: 8 GB (8 GB)
-Apr-27 23:01:24.146 [main] DEBUG nextflow.Session - Work-dir: /var/home/robs/project_VEO/work [btrfs]
-Apr-27 23:01:24.147 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /var/home/robs/project_VEO/bin
-Apr-27 23:01:24.156 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
-Apr-27 23:01:24.167 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
-Apr-27 23:01:24.170 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
-Apr-27 23:01:24.223 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
-Apr-27 23:01:24.234 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 9; maxThreads: 1000
-Apr-27 23:01:24.337 [main] DEBUG nextflow.Session - Session start
-Apr-27 23:01:24.987 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
-Apr-27 23:01:25.189 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.189 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.202 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
-Apr-27 23:01:25.211 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=8; memory=15.4 GB; capacity=8; pollInterval=100ms; dumpInterval=5m
-Apr-27 23:01:25.214 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
-Apr-27 23:01:25.241 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'QC_TRIM': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.291 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.291 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.292 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'ASSEMBLY': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.296 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.296 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.297 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'POLISH': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.302 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.302 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.303 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'CHECKV': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.307 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.307 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.308 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'VIRAL_VERIFY': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.312 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.312 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.313 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'PHAROKKA': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.321 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.322 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.323 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'PHOLD': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.329 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
-Apr-27 23:01:25.330 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
-Apr-27 23:01:25.330 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'REPORT': maxForks=0; fair=false; array=0
-Apr-27 23:01:25.354 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: QC_TRIM, POLISH, ASSEMBLY, CHECKV, PHOLD, VIRAL_VERIFY, PHAROKKA, REPORT
-Apr-27 23:01:25.357 [main] DEBUG nextflow.Session - Igniting dataflow network (9)
-Apr-27 23:01:25.366 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > QC_TRIM
-Apr-27 23:01:25.366 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ASSEMBLY
-Apr-27 23:01:25.367 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > POLISH
-Apr-27 23:01:25.367 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > CHECKV
-Apr-27 23:01:25.368 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > VIRAL_VERIFY
-Apr-27 23:01:25.369 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > PHAROKKA
-Apr-27 23:01:25.370 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > PHOLD
-Apr-27 23:01:25.370 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > REPORT
-Apr-27 23:01:25.371 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
-  Script_1570f5d19d64891d: /var/home/robs/project_VEO/main.nf
-Apr-27 23:01:25.371 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
-Apr-27 23:01:25.372 [main] DEBUG nextflow.Session - Session await
-Apr-27 23:01:25.460 [Actor Thread 8] DEBUG nextflow.conda.CondaCache - micromamba found local env for environment=./environment.yml; path=/var/home/robs/project_VEO/work/conda/env-a1ceb2e91471fdcd119a64d5259fb986
-Apr-27 23:01:25.615 [Actor Thread 9] INFO  nextflow.processor.TaskProcessor - [1a/0c5373] Cached process > QC_TRIM (1)
-Apr-27 23:01:25.640 [Actor Thread 7] INFO  nextflow.processor.TaskProcessor - [e8/d05b43] Cached process > ASSEMBLY (1)
-Apr-27 23:01:25.645 [Actor Thread 9] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-Apr-27 23:01:25.655 [Actor Thread 5] INFO  nextflow.processor.TaskProcessor - [4e/39169b] Cached process > POLISH (1)
-Apr-27 23:01:25.670 [Actor Thread 4] INFO  nextflow.processor.TaskProcessor - [f4/58cbf7] Cached process > CHECKV (1)
-Apr-27 23:01:25.721 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
-Apr-27 23:01:25.723 [Task submitter] INFO  nextflow.Session - [ef/199918] Submitted process > PHAROKKA (1)
-Apr-27 23:06:25.418 [Task monitor] DEBUG n.processor.TaskPollingMonitor - !! executor local > tasks to be completed: 1 -- submitted tasks are shown below
-~> TaskHandler[id: 6; name: PHAROKKA (1); status: RUNNING; exit: -; error: -; workDir: /var/home/robs/project_VEO/work/ef/19991838233fde92710a136ae4ddcd]
-Apr-27 23:06:25.857 [Task submitter] DEBUG n.processor.TaskPollingMonitor - %% executor local > tasks in the submission queue: 1 -- tasks to be submitted are shown below
-~> TaskHandler[id: 4; name: VIRAL_VERIFY (1); status: NEW; exit: -; error: -; workDir: /var/home/robs/project_VEO/work/4a/b0578664c7a8ce7cb618374b81861d]
-Apr-27 23:07:14.837 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 6; name: PHAROKKA (1); status: COMPLETED; exit: 0; error: -; workDir: /var/home/robs/project_VEO/work/ef/19991838233fde92710a136ae4ddcd]
-Apr-27 23:07:14.838 [Task monitor] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'TaskFinalizer' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
-Apr-27 23:07:14.843 [TaskFinalizer-1] DEBUG n.processor.TaskFileCollector - Process `PHAROKKA (1)` is unable to find [UnixPath]: `/var/home/robs/project_VEO/work/ef/19991838233fde92710a136ae4ddcd/pharokka_out/pharokka_summary.tsv` (pattern: `pharokka_out/pharokka_summary.tsv`)
-Apr-27 23:07:14.844 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
-Apr-27 23:07:14.845 [Task submitter] INFO  nextflow.Session - [4a/b05786] Submitted process > VIRAL_VERIFY (1)
-Apr-27 23:07:14.852 [TaskFinalizer-1] DEBUG nextflow.processor.TaskProcessor - Handling unexpected condition for
-  task: name=PHAROKKA (1); work-dir=/var/home/robs/project_VEO/work/ef/19991838233fde92710a136ae4ddcd
-  error [nextflow.exception.MissingFileException]: Missing output file(s) `pharokka_out/pharokka_summary.tsv` expected by process `PHAROKKA (1)`
-Apr-27 23:07:14.903 [TaskFinalizer-1] ERROR nextflow.processor.TaskProcessor - Error executing process > 'PHAROKKA (1)'
-
-Caused by:
-  Missing output file(s) `pharokka_out/pharokka_summary.tsv` expected by process `PHAROKKA (1)`
-
-
-Command executed:
-
-  pharokka.py         -i consensus.fasta         -o pharokka_out         -t 5         -d ~/micromamba/envs/phage-pipeline/db/         -f
-
-Command exit status:
-  0
-
-Command output:
-  (empty)
-
-Command error:
-  2026-04-27 23:02:49.253 | INFO     | processes:run_aragorn:1007 - Running Aragorn.
-  2026-04-27 23:02:49.254 | INFO     | external_tools:run:50 - Started running aragorn -l -gcbact -w -m -o pharokka_out/pharokka_aragorn.txt consensus.fasta ...
-  2026-04-27 23:02:49.299 | INFO     | external_tools:run:52 - Done running aragorn -l -gcbact -w -m -o pharokka_out/pharokka_aragorn.txt consensus.fasta
-  2026-04-27 23:02:49.299 | INFO     | __main__:main:326 - Starting MMseqs2.
-  2026-04-27 23:02:49.299 | INFO     | processes:run_mmseqs:772 - Running MMseqs2 on PHROG Database.
-  2026-04-27 23:02:49.300 | INFO     | external_tools:run:50 - Started running mmseqs createdb pharokka_out/phanotate_aas_tmp.fasta pharokka_out/target_dir/target_seqs ...
-  2026-04-27 23:02:49.320 | INFO     | external_tools:run:52 - Done running mmseqs createdb pharokka_out/phanotate_aas_tmp.fasta pharokka_out/target_dir/target_seqs
-  2026-04-27 23:02:49.320 | INFO     | external_tools:run:50 - Started running mmseqs search -e 1E-05 /home/robs/micromamba/envs/phage-pipeline/db/phrogs_profile_db pharokka_out/target_dir/target_seqs pharokka_out/mmseqs/results_mmseqs pharokka_out/tmp_dir/ -s 8.5 --threads 5 ...
-  2026-04-27 23:05:11.355 | INFO     | external_tools:run:52 - Done running mmseqs search -e 1E-05 /home/robs/micromamba/envs/phage-pipeline/db/phrogs_profile_db pharokka_out/target_dir/target_seqs pharokka_out/mmseqs/results_mmseqs pharokka_out/tmp_dir/ -s 8.5 --threads 5
-  2026-04-27 23:05:11.355 | INFO     | external_tools:run:50 - Started running mmseqs createtsv /home/robs/micromamba/envs/phage-pipeline/db/phrogs_profile_db pharokka_out/target_dir/target_seqs pharokka_out/mmseqs/results_mmseqs pharokka_out/mmseqs_results.tsv --full-header --threads 5 ...
-  2026-04-27 23:05:11.382 | INFO     | external_tools:run:52 - Done running mmseqs createtsv /home/robs/micromamba/envs/phage-pipeline/db/phrogs_profile_db pharokka_out/target_dir/target_seqs pharokka_out/mmseqs/results_mmseqs pharokka_out/mmseqs_results.tsv --full-header --threads 5
-  2026-04-27 23:05:11.382 | INFO     | processes:run_mmseqs:772 - Running MMseqs2 on CARD Database.
-  2026-04-27 23:05:11.383 | INFO     | external_tools:run:50 - Started running mmseqs createdb pharokka_out/phanotate_aas_tmp.fasta pharokka_out/CARD_target_dir/target_seqs ...
-  2026-04-27 23:05:11.412 | INFO     | external_tools:run:52 - Done running mmseqs createdb pharokka_out/phanotate_aas_tmp.fasta pharokka_out/CARD_target_dir/target_seqs
-  2026-04-27 23:05:11.413 | INFO     | external_tools:run:50 - Started running mmseqs search --min-seq-id 0.8 -c 0.4 /home/robs/micromamba/envs/phage-pipeline/db/CARD pharokka_out/CARD_target_dir/target_seqs pharokka_out/CARD/results_mmseqs pharokka_out/CARD_dir/ -s 8.5 --threads 5 ...
-  2026-04-27 23:05:45.910 | INFO     | external_tools:run:52 - Done running mmseqs search --min-seq-id 0.8 -c 0.4 /home/robs/micromamba/envs/phage-pipeline/db/CARD pharokka_out/CARD_target_dir/target_seqs pharokka_out/CARD/results_mmseqs pharokka_out/CARD_dir/ -s 8.5 --threads 5
-  2026-04-27 23:05:45.911 | INFO     | external_tools:run:50 - Started running mmseqs createtsv /home/robs/micromamba/envs/phage-pipeline/db/CARD pharokka_out/CARD_target_dir/target_seqs pharokka_out/CARD/results_mmseqs pharokka_out/CARD_results.tsv --full-header --threads 5 ...
-  2026-04-27 23:05:45.921 | INFO     | external_tools:run:52 - Done running mmseqs createtsv /home/robs/micromamba/envs/phage-pipeline/db/CARD pharokka_out/CARD_target_dir/target_seqs pharokka_out/CARD/results_mmseqs pharokka_out/CARD_results.tsv --full-header --threads 5
-  2026-04-27 23:05:45.921 | INFO     | processes:run_mmseqs:772 - Running MMseqs2 on VFDB Database.
-  2026-04-27 23:05:45.922 | INFO     | external_tools:run:50 - Started running mmseqs createdb pharokka_out/phanotate_aas_tmp.fasta pharokka_out/VFDB_target_dir/target_seqs ...
-  2026-04-27 23:05:45.945 | INFO     | external_tools:run:52 - Done running mmseqs createdb pharokka_out/phanotate_aas_tmp.fasta pharokka_out/VFDB_target_dir/target_seqs
-  2026-04-27 23:05:45.945 | INFO     | external_tools:run:50 - Started running mmseqs search --min-seq-id 0.8 -c 0.4 /home/robs/micromamba/envs/phage-pipeline/db/vfdb pharokka_out/VFDB_target_dir/target_seqs pharokka_out/VFDB/results_mmseqs pharokka_out/VFDB_dir/ -s 8.5 --threads 5 ...
-  2026-04-27 23:06:45.722 | INFO     | external_tools:run:52 - Done running mmseqs search --min-seq-id 0.8 -c 0.4 /home/robs/micromamba/envs/phage-pipeline/db/vfdb pharokka_out/VFDB_target_dir/target_seqs pharokka_out/VFDB/results_mmseqs pharokka_out/VFDB_dir/ -s 8.5 --threads 5
-  2026-04-27 23:06:45.722 | INFO     | external_tools:run:50 - Started running mmseqs createtsv /home/robs/micromamba/envs/phage-pipeline/db/vfdb pharokka_out/VFDB_target_dir/target_seqs pharokka_out/VFDB/results_mmseqs pharokka_out/vfdb_results.tsv --full-header --threads 5 ...
-  2026-04-27 23:06:45.733 | INFO     | external_tools:run:52 - Done running mmseqs createtsv /home/robs/micromamba/envs/phage-pipeline/db/vfdb pharokka_out/VFDB_target_dir/target_seqs pharokka_out/VFDB/results_mmseqs pharokka_out/vfdb_results.tsv --full-header --threads 5
-  2026-04-27 23:06:45.734 | INFO     | __main__:main:363 - Running PyHMMER on PHROGs.
-  2026-04-27 23:07:09.980 | INFO     | __main__:main:379 - Post Processing Output.
-  2026-04-27 23:07:10.044 | INFO     | post_processing:create_mmseqs_tophits:2384 - Processing MMseqs2 outputs.
-  2026-04-27 23:07:10.044 | INFO     | post_processing:create_mmseqs_tophits:2385 - Processing PHROGs output.
-  2026-04-27 23:07:10.222 | INFO     | post_processing:process_vfdb_results:2651 - Processing VFDB output.
-  2026-04-27 23:07:10.229 | INFO     | post_processing:process_vfdb_results:2837 - 0 VFDB virulence factors identified.
-  2026-04-27 23:07:10.231 | INFO     | post_processing:process_card_results:2855 - Processing CARD output.
-  2026-04-27 23:07:10.235 | INFO     | post_processing:process_card_results:2999 - 0 CARD AMR genes identified.
-  2026-04-27 23:07:10.580 | INFO     | __main__:main:452 - Converting gff to genbank.
-  2026-04-27 23:07:10.699 | INFO     | post_processing:extract_terl:2220 - Terminase large subunit found.
-  2026-04-27 23:07:10.714 | INFO     | post_processing:extract_terl:2223 - More than one CDS annotated as terminase large subunit found. 
-  Saving all.
-  2026-04-27 23:07:10.767 | INFO     | __main__:main:470 - Finding the closest match for each contig in INPHARED using mash.
-  2026-04-27 23:07:10.768 | INFO     | external_tools:run:50 - Started running mash sketch consensus.fasta -o pharokka_out/input_mash_sketch.msh -i ...
-  2026-04-27 23:07:10.781 | INFO     | external_tools:run:52 - Done running mash sketch consensus.fasta -o pharokka_out/input_mash_sketch.msh -i
-  2026-04-27 23:07:10.781 | INFO     | external_tools:run_to_stdout:59 - Started running mash dist pharokka_out/input_mash_sketch.msh /home/robs/micromamba/envs/phage-pipeline/db/9Aug2025_genomes.fa.msh -d 0.2 -i ...
-  2026-04-27 23:07:14.195 | INFO     | external_tools:run_to_stdout:61 - Done running mash dist pharokka_out/input_mash_sketch.msh /home/robs/micromamba/envs/phage-pipeline/db/9Aug2025_genomes.fa.msh -d 0.2 -i
-  2026-04-27 23:07:14.524 | INFO     | __main__:main:492 - Pharokka has finished.
-  2026-04-27 23:07:14.524 | INFO     | __main__:main:493 - Elapsed time: 346.65 seconds
-  2026-04-27 23:07:14.524 | INFO     | __main__:main:495 - If you use Pharokka in your research, please cite:
-  2026-04-27 23:07:14.525 | INFO     | __main__:main:496 - George Bouras, Roshan Nepal, Ghais Houtak, Alkis James Psaltis, Peter-John Wormald, Sarah Vreugde.
-  2026-04-27 23:07:14.525 | INFO     | __main__:main:499 - Pharokka: a fast scalable bacteriophage annotation tool.
-  2026-04-27 23:07:14.525 | INFO     | __main__:main:500 - Bioinformatics, Volume 39, Issue 1, January 2023, btac776.
-  2026-04-27 23:07:14.525 | INFO     | __main__:main:501 - https://doi.org/10.1093/bioinformatics/btac776.
-  2026-04-27 23:07:14.525 | INFO     | __main__:main:502 - You should also cite the full list of tools Pharokka uses, which can be found at https://github.com/gbouras13/pharokka#citation.
-
-Work dir:
-  /var/home/robs/project_VEO/work/ef/19991838233fde92710a136ae4ddcd
-
-Tip: when you have fixed the problem you can continue the execution adding the option `-resume` to the run command line
-Apr-27 23:07:14.912 [TaskFinalizer-1] INFO  nextflow.Session - Execution cancelled -- Finishing pending tasks before exit
-Apr-27 23:07:14.939 [main] DEBUG nextflow.Session - Session await > all processes finished
+  Process: 97958@toolbx [192.168.178.93]
+  CPUs: 8 - Mem: 15.4 GB (3.2 GB) - Swap: 8 GB (8 GB)
+Apr-27 23:15:54.316 [main] DEBUG nextflow.Session - Work-dir: /var/home/robs/project_VEO/work [btrfs]
+Apr-27 23:15:54.317 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /var/home/robs/project_VEO/bin
+Apr-27 23:15:54.328 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Apr-27 23:15:54.342 [main] DEBUG nextflow.Session - Observer factory (v2): LinObserverFactory
+Apr-27 23:15:54.347 [main] DEBUG nextflow.Session - Observer factory (v2): DefaultObserverFactory
+Apr-27 23:15:54.404 [main] DEBUG nextflow.cache.CacheFactory - Using Nextflow cache factory: nextflow.cache.DefaultCacheFactory
+Apr-27 23:15:54.416 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 9; maxThreads: 1000
+Apr-27 23:15:54.504 [main] DEBUG nextflow.Session - Session start
+Apr-27 23:15:55.077 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Apr-27 23:15:55.245 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.245 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.268 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Apr-27 23:15:55.281 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=8; memory=15.4 GB; capacity=8; pollInterval=100ms; dumpInterval=5m
+Apr-27 23:15:55.284 [main] DEBUG n.processor.TaskPollingMonitor - >>> barrier register (monitor: local)
+Apr-27 23:15:55.315 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'QC_TRIM': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.373 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.373 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.374 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'ASSEMBLY': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.379 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.379 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.380 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'POLISH': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.385 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.385 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.385 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'CHECKV': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.388 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.389 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.389 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'VIRAL_VERIFY': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.393 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.393 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.394 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'PHAROKKA': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.398 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.398 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.399 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'PHOLD': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.404 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Apr-27 23:15:55.405 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Apr-27 23:15:55.405 [main] DEBUG nextflow.processor.TaskProcessor - Creating process 'REPORT': maxForks=0; fair=false; array=0
+Apr-27 23:15:55.428 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: QC_TRIM, POLISH, ASSEMBLY, CHECKV, PHOLD, VIRAL_VERIFY, PHAROKKA, REPORT
+Apr-27 23:15:55.431 [main] DEBUG nextflow.Session - Igniting dataflow network (9)
+Apr-27 23:15:55.438 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > QC_TRIM
+Apr-27 23:15:55.439 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ASSEMBLY
+Apr-27 23:15:55.440 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > POLISH
+Apr-27 23:15:55.440 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > CHECKV
+Apr-27 23:15:55.441 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > VIRAL_VERIFY
+Apr-27 23:15:55.441 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > PHAROKKA
+Apr-27 23:15:55.442 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > PHOLD
+Apr-27 23:15:55.443 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > REPORT
+Apr-27 23:15:55.444 [main] DEBUG nextflow.script.ScriptRunner - Parsed script files:
+  Script_61ea16890fece698: /var/home/robs/project_VEO/main.nf
+Apr-27 23:15:55.444 [main] DEBUG nextflow.script.ScriptRunner - > Awaiting termination 
+Apr-27 23:15:55.444 [main] DEBUG nextflow.Session - Session await
+Apr-27 23:15:55.530 [Actor Thread 5] DEBUG nextflow.conda.CondaCache - micromamba found local env for environment=./environment.yml; path=/var/home/robs/project_VEO/work/conda/env-a1ceb2e91471fdcd119a64d5259fb986
+Apr-27 23:15:55.693 [Actor Thread 9] INFO  nextflow.processor.TaskProcessor - [1a/0c5373] Cached process > QC_TRIM (1)
+Apr-27 23:15:55.719 [Actor Thread 3] INFO  nextflow.processor.TaskProcessor - [e8/d05b43] Cached process > ASSEMBLY (1)
+Apr-27 23:15:55.725 [Actor Thread 3] DEBUG nextflow.util.ThreadPoolBuilder - Creating thread pool 'PublishDir' minSize=10; maxSize=24; workQueue=LinkedBlockingQueue[-1]; allowCoreThreadTimeout=false
+Apr-27 23:15:55.734 [Actor Thread 6] INFO  nextflow.processor.TaskProcessor - [4e/39169b] Cached process > POLISH (1)
+Apr-27 23:15:55.752 [Actor Thread 5] INFO  nextflow.processor.TaskProcessor - [f4/58cbf7] Cached process > CHECKV (1)
+Apr-27 23:15:55.756 [Actor Thread 2] INFO  nextflow.processor.TaskProcessor - [4a/b05786] Cached process > VIRAL_VERIFY (1)
+Apr-27 23:15:55.816 [Task submitter] DEBUG n.executor.local.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Apr-27 23:15:55.818 [Task submitter] INFO  nextflow.Session - [44/6cc401] Submitted process > PHAROKKA (1)
