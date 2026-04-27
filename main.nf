@@ -1,144 +1,271 @@
 // main.nf
-// Nextflow Pipeline for Phage Assembly
-// Usage: 
-//   Real run:  nextflow run main.nf --inputFile reads.fastq
-//   Test run:  nextflow run main.nf --inputFile reads.fastq -stub
+// Nextflow Pipeline for Phage Isolate Assembly & Annotation
+// Workflow: QC -> Flye -> Medaka -> CheckV/ViralVerify -> Pharokka -> Phold -> Phynteny -> Report
+// Usage:
+//   Real run:  nextflow run main.nf -c nextflow.config --inputFile long_reads.fastq 
+//   Test run:  nextflow run main.nf -c nextflow.config --inputFile long_reads.fastq -stub
 
 // --- Parameters ---
-params.inputFile = null
-params.outdir = './results'
+params.inputFile  = null
+params.outdir     = './results'
 
-// --- 1. QC & Trimming: fastplong ---
+// ============================================================
+// 1. QC & Trimming: fastplong
+// ============================================================
 process QC_TRIM {
+    publishDir "${params.outdir}/01_qc", mode: 'copy'
+
     input:
     path reads
-    
+
     output:
-    path "*.fastq.gz", emit: trimmed_reads
-    path "fastplong_report.html", emit: qc_report
-    path "fastplong_report.json", emit: qc_report_json
+    path "*_trimmed.fastq.gz", emit: trimmed_reads
+    path "fastplong.html",  emit: qc_report
+    path "fastplong.json",  emit: qc_report_json
 
     script:
     """
-    fastplong -i ${reads} -o ${reads.baseName}_trimmed.fastq.gz --n_base_limit 500 --thread ${task.cpus}
+    fastplong \
+        -i ${reads} \
+        -o ${reads.baseName}_trimmed.fastq.gz \
+        --n_base_limit 500 \
+        --thread ${task.cpus}
     """
 
     stub:
     """
-    echo "[STUB] Running fastplong on ${reads}"
-    echo "Dummy trimmed content" > ${reads.baseName}_trimmed.fastq.gz
+    echo "Dummy trimmed content" | gzip > ${reads.baseName}_trimmed.fastq.gz
     echo "<html><body>Stub QC Report</body></html>" > fastplong_report.html
     echo '{"summary": "stub"}' > fastplong_report.json
     """
 }
 
-// --- 2. Assembly: metaFlye ---
+// ============================================================
+// 2. Assembly: Flye (Standard Mode)
+// ============================================================
 process ASSEMBLY {
+    publishDir "${params.outdir}/02_assembly", mode: 'copy'
+
     input:
     path trimmed_reads
-    
+
     output:
-    path "flye_out/assembly.fasta", emit: assembly
-    path "flye_out/assembly_info.txt", emit: assembly_info
+    path "flye_out/assembly.fasta",       emit: assembly
+    path "flye_out/assembly_info.txt",    emit: assembly_info
 
     script:
     """
-    flye --nano-raw ${trimmed_reads} --meta --out-dir flye_out --threads ${task.cpus} --genome-size 50k
+    flye \
+        --nano-corr ${trimmed_reads} \
+        --out-dir flye_out \
+        --meta \
+        --threads ${task.cpus}
     """
 
     stub:
     """
-    echo "[STUB] Running metaFlye assembly"
     mkdir -p flye_out
-    echo ">contig_1 length=50000" > flye_out/assembly.fasta
-    echo "ATCGN" >> flye_out/assembly.fasta
+    printf '>contig_1 length=50000\\nATCGATCGATCG\\n' > flye_out/assembly.fasta
     echo "assembly_info: stubbed" > flye_out/assembly_info.txt
     """
 }
 
-// --- 3. Viral Refinement: viralFlye ---
-process VIRAL_FLYE {
+// ============================================================
+// 3. Polishing: Medaka
+// ============================================================
+process POLISH {
+    publishDir "${params.outdir}/02_assembly", mode: 'copy'
+
     input:
-    path flye_dir
+    path assembly
     path trimmed_reads
-    
+
     output:
-    path "viralflye_out/components_viralFlye.fasta", emit: final_assembly
-    path "viralflye_out/host_prediction.txt", emit: host_pred
-    path "viralflye_out/circulars_viralFlye.fasta", emit: circular_contigs
+    path "medaka_out/consensus.fasta", emit: polished_assembly
 
     script:
     """
-    if [ ! -f Pfam-A.hmm.gz ]; then
-        echo "Downloading Pfam-A.hmm.gz..."
-        wget -q ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz
-    fi
-    viralFlye.py --dir ${flye_dir} --hmm Pfam-A.hmm.gz --reads ${trimmed_reads} --outdir viralflye_out
+    medaka_consensus \
+        -i ${trimmed_reads} \
+        -d ${assembly} \
+        -o medaka_out \
+        -t ${task.cpus}
     """
 
     stub:
     """
-    echo "[STUB] Running viralFlye refinement"
-    mkdir -p viralflye_out
-    echo ">viral_contig_1 circular=true" > viralflye_out/components_viralFlye.fasta
-    echo "ATCGN" >> viralflye_out/components_viralFlye.fasta
-    echo "Host: Escherichia coli (predicted)" > viralflye_out/host_prediction.txt
-    cp viralflye_out/components_viralFlye.fasta viralflye_out/circulars_viralFlye.fasta
+    mkdir -p medaka_out
+    printf '>contig_1_polished length=50000\\nATCGATCGATCG\\n' > medaka_out/consensus.fasta
     """
 }
 
-// --- 4. Validation: CheckV ---
+// ============================================================
+// 4. Assembly QC: CheckV
+// ============================================================
 process CHECKV {
+    publishDir "${params.outdir}/03_qc/checkv", mode: 'copy'
+
     input:
-    path final_assembly
-    
+    path polished_assembly
+
     output:
     path "checkv_out/*", emit: checkv_results
 
     script:
     """
-    checkv end-to-end ${final_assembly} checkv_out --threads ${task.cpus}
+    checkv end_to_end ${polished_assembly} checkv_out -t ${task.cpus} -d ~/micromamba/envs/phage-pipeline/db/checkv-db-v1.5
     """
 
     stub:
     """
-    echo "[STUB] Running CheckV validation"
     mkdir -p checkv_out
-    echo "sample_id,completeness,contamination" > checkv_out/summary.csv
-    echo "sample_1,95.5,1.2" >> checkv_out/summary.csv
+    printf 'contig_id,completeness,contamination\\nviral_contig_1,95.5,1.2\\n' > checkv_out/quality_summary.tsv
     """
 }
 
-// --- 5. Validation: BUSCO ---
-process BUSCO {
+// ============================================================
+// 5. Taxonomic Verification: ViralVerify
+// ============================================================
+process VIRAL_VERIFY {
+    publishDir "${params.outdir}/03_qc/viralverify", mode: 'copy'
+
     input:
-    path final_assembly
-    
+    path polished_assembly
+
     output:
-    path "busco_out/short_summary*.txt", emit: busco_report
+    path "viralverify_report.txt", emit: taxonomy_report
 
     script:
     """
-    busco -i ${final_assembly} -l viral_odb10 -m geno -o busco_out --cpu ${task.cpus}
+    viralverify -f ${polished_assembly} -o viralverify_report.txt --hmm ~/micromamba/envs/phage-pipeline/db/nbc_hmms.hmm
     """
 
     stub:
     """
-    echo "[STUB] Running BUSCO validation"
-    mkdir -p busco_out
-    echo "# BUSCO stub report" > busco_out/short_summary.txt
-    echo "C:98.5%[S:97.0%,D:1.5%],F:0.5%,M:1.0%,n:100" >> busco_out/short_summary.txt
+    printf 'Contig\\tPredicted_Label\\tFamily\\tGenus\\tviral_score\\n' > viralverify_report.txt
+    printf 'contig_1\\tVirus\\tSiphoviridae\\tUnknown\\t0.98\\n' >> viralverify_report.txt
     """
 }
 
-// --- 6. Reporting: MultiQC ---
+// ============================================================
+// 6a. Phage Annotation: Pharokka
+// ============================================================
+process PHAROKKA {
+    publishDir "${params.outdir}/04_annotation/", mode: 'copy'
+
+    input:
+    path polished_assembly
+
+    output:
+    path "pharokka_out/pharokka.gff",         emit: pharokka_gff
+    path "pharokka_out/pharokka.gbk",         emit: pharokka_gbk
+    path "pharokka_out/pharokka_summary.tsv", emit: pharokka_summary
+    path "pharokka_out",                      emit: pharokka_dir
+
+    script:
+    """
+    pharokka.py \
+        -i ${polished_assembly} \
+        -o pharokka_out \
+        -t ${task.cpus} \
+        -d ~/micromamba/envs/phage-pipeline/db/ \
+        -f
+    """
+
+    stub:
+    """
+    mkdir -p pharokka_out
+    printf '##gff-version 3\\nviral_contig_1\\tpharokka\\tCDS\\t1\\t500\\t.\\t+\\t0\\tID=CDS_1;phrog=phrog_1;function=tail fiber\\n' \
+        > pharokka_out/pharokka.gff
+    echo "LOCUS viral_contig_1" > pharokka_out/pharokka.gbk
+    printf 'contig\\tCDS\\ttRNA\\ttmRNA\\ncontig_1\\t42\\t2\\t0\\n' \
+        > pharokka_out/pharokka_summary.tsv
+    """
+}
+
+// ============================================================
+// 6b. Structure-based Annotation: Phold
+// ============================================================
+process PHOLD {
+    publishDir "${params.outdir}/04_annotation/phold", mode: 'copy'
+
+    input:
+    path gbk_file
+
+    output:
+    path "phold_out/phold_summary.tsv", emit: phold_summary
+    path "phold_out/phold.gff",         emit: phold_gff
+    path "phold_out/phold.gbk",         emit: phold_gbk
+    path "phold_out",                   emit: phold_dir
+
+    script:
+    """
+    phold run \
+        -i ${gbk_file} \
+        -o phold_out \
+        -t ${task.cpus} \
+        -f
+    """
+
+    stub:
+    """
+    mkdir -p phold_out
+    printf '##gff-version 3\\nviral_contig_1\\tphold\\tCDS\\t1\\t500\\t.\\t+\\t0\\tID=CDS_1;function=tail fiber protein (3D)\\n' \
+        > phold_out/phold.gff
+    cp ${gbk_file} phold_out/phold.gbk
+    printf 'contig\\tCDS_total\\tannotated\\thypothetical\\ncontig_1\\t42\\t38\\t4\\n' \
+        > phold_out/phold_summary.tsv
+    """
+}
+
+// // ============================================================
+// // 6c. Synteny-based Context: Phynteny
+// // ============================================================
+// process PHYNTENY {
+//     publishDir "${params.outdir}/04_annotation/phynteny", mode: 'copy'
+
+//     input:
+//     path gbk_file
+
+//     output:
+//     path "phynteny_out/phynteny.gbk",         emit: phynteny_gbk
+//     path "phynteny_out/phynteny_summary.tsv", emit: phynteny_summary
+
+//     script:
+//     """
+//     mkdir -p phynteny_input
+//     cp ${gbk_file} phynteny_input/
+    
+//     phynteny \
+//         phynteny_input \
+//         phynteny_out
+//     """
+
+//     stub:
+//     """
+//     mkdir -p phynteny_out
+//     echo "LOCUS viral_contig_1_phynteny" > phynteny_out/phynteny.gbk
+//     printf 'contig\\tsynteny_group\\trelated_phages\\ncontig_1\\tSG_042\\t12\\n' \
+//         > phynteny_out/phynteny_summary.tsv
+//     """
+// }
+
+// ============================================================
+// 6. Report: MultiQC
+// ============================================================
 process REPORT {
+    tag "multiqc"
+    publishDir "${params.outdir}/05_report", mode: 'copy'
+
     input:
     path qc_report
     path qc_report_json
     path checkv_results
-    path busco_report
-    
+    path taxonomy_report  
+    path pharokka_summary
+    path phold_summary
+    // path phynteny_summary
+
     output:
     path "multiqc_out/multiqc_report.html", emit: final_report
 
@@ -149,49 +276,65 @@ process REPORT {
 
     stub:
     """
-    echo "[STUB] Generating MultiQC report"
     mkdir -p multiqc_out
-    echo "<html><body><h1>Stub MultiQC Report</h1><p>All steps completed successfully.</p></body></html>" > multiqc_out/multiqc_report.html
+    cat <<'EOF' > multiqc_out/multiqc_report.html
+    <html>
+    <body>
+        <h1>Stub MultiQC Report</h1>
+        <p>All steps completed successfully (stub mode).</p>
+        <p>Includes: QC, CheckV, ViralVerify, Pharokka, Phold, Phynteny</p>
+    </body>
+    </html>
+    EOF
     """
 }
 
-// --- Workflow Definition ---
+// ============================================================
+// Workflow
+// ============================================================
 workflow {
-    // 1. Validate Input Parameter exists
+
     if (!params.inputFile) {
-        error "Please provide an input file using --inputFile <path_to_fastq>"
+        error "Please provide an input file: --inputFile <path_to_fastq>"
     }
 
-    // 2. Define Input Channel
-    // 'checkIfExists: true' ensures we fail early if the path is wrong
-    Channel.fromPath(params.inputFile, checkIfExists: true)
-        .set { samples }
+    reads_ch = Channel.fromPath(params.inputFile, checkIfExists: true)
 
-    // 3. Invoke Processes
-    qc_results = QC_TRIM(samples)
-    trimmed_reads_ch = qc_results.trimmed_reads
-    qc_report_ch = qc_results.qc_report
-    qc_json_ch = qc_results.qc_report_json
+    // 1. QC
+    qc_out       = QC_TRIM(reads_ch)
 
-    asm_results = ASSEMBLY(trimmed_reads_ch)
-    assembly_ch = asm_results.assembly
+    // 2. Assembly
+    asm_out      = ASSEMBLY(qc_out.trimmed_reads)
 
-    viral_results = VIRAL_FLYE(assembly_ch, trimmed_reads_ch)
-    final_assembly_ch = viral_results.final_assembly
+    // 3. Polishing
+    polish_out   = POLISH(asm_out.assembly, qc_out.trimmed_reads)
 
-    checkv_results = CHECKV(final_assembly_ch)
-    checkv_out_ch = checkv_results.checkv_results
+    // 4. QC & Verification (Parallel)
+    checkv_out   = CHECKV(polish_out.polished_assembly)
+    verify_out   = VIRAL_VERIFY(polish_out.polished_assembly)
 
-    busco_results = BUSCO(final_assembly_ch)
-    busco_report_ch = busco_results.busco_report
+    // 5. Annotation Chain
+    pharokka_out = PHAROKKA(polish_out.polished_assembly)
+    phold_out    = PHOLD(pharokka_out.pharokka_gbk)
+    // phynteny_out = PHYNTENY(phold_out.phold_gbk)
 
-    report_results = REPORT(qc_report_ch, qc_json_ch, checkv_out_ch, busco_report_ch)
-    
-    // 4. Final Output
-    report_results.final_report.view { report_path -> 
-        println "========================================="
-        println "Pipeline completed successfully!"
-        println "Final Report: $report_path"
-        println "========================================="
+    // 6. Report
+    report_out   = REPORT(
+        qc_out.qc_report,
+        qc_out.qc_report_json,
+        checkv_out.checkv_results,
+        verify_out.taxonomy_report, 
+        pharokka_out.pharokka_summary,
+        phold_out.phold_summary,
+        // phynteny_out.phynteny_summary
+    )
+
+    report_out.final_report.view { path ->
+        """
+        =========================================
+        Pipeline completed!
+        Report: ${path}
+        =========================================
+        """
     }
 }

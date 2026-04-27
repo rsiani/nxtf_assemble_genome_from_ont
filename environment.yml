@@ -4,21 +4,18 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  # Core Workflow & QC
+  # QC & Trimming
   - fastplong
+  # Assembly & Polishing
   - flye
   - medaka
-  
-  # Viral Specific Tools
-  - viralflye
+  # Assembly QC
   - checkv
-  - busco
-  
-  # Reporting & Utilities
+  - viralverify
+  # Annotation
+  - pharokka
+  - phold
+  # - phynteny
+  # Reporting & utilities
   - multiqc
-  - hmmer       
-  - biopython   
-  - wget        
-  - gzip        
-  
-  - python=3.9
+  - wget
