@@ -40,7 +40,6 @@ nextflow run main.nf -c nextflow.config --inputFile reads.fastq
 
 ## Output structure
 
-```
 results/
 ├── 01_qc/               # fastplong trimmed reads + HTML/JSON report
 ├── 02_assembly/         # Flye assembly.fasta + assembly_info.txt
