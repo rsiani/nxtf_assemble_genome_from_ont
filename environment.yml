@@ -1,0 +1,24 @@
+name: phage-pipeline
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  # Core Workflow & QC
+  - fastplong
+  - flye
+  - medaka
+  
+  # Viral Specific Tools
+  - viralflye
+  - checkv
+  - busco
+  
+  # Reporting & Utilities
+  - multiqc
+  - hmmer       
+  - biopython   
+  - wget        
+  - gzip        
+  
+  - python=3.9

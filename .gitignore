@@ -1,5 +1,5 @@
 .nextflow/
-data/
+work/
 *.log
 .conda/
 .micromamba/
