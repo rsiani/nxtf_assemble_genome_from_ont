@@ -11,7 +11,6 @@ Nextflow pipeline for end-to-end processing of Oxford Nanopore phage isolate rea
 | 3 | Polishing | Medaka | Refined contigs |
 | 4 | Assembly QC | CheckV + viralVerify | Completeness / contamination |
 | 5 | Annotation | Pharokka → Phold → Phynteny | GFF, PHROGs functions, structure-based calls, synteny context |
-| 6 | Report | MultiQC | HTML summary report |
 
 ## Requirements
 
@@ -43,13 +42,12 @@ nextflow run main.nf -c nextflow.config --inputFile reads.fastq
 results/
 ├── 01_qc/               # fastplong trimmed reads + HTML/JSON report
 ├── 02_assembly/         # Flye assembly.fasta + assembly_info.txt
-├── 02install_databases.py -o <path/to/databse_dir>_medaka/        # viralFlye refined contigs + host prediction
+├── 02_medaka/        # polish assembly
 ├── 04_assembly_qc/
 │   ├── checkv/          # CheckV quality summary
-│   └── viralVerify/           # BUSCO completeness report
+│   └── viralVerify/           # viralVerify prediction
 ├── 05_annotation/
 │   ├── pharokka/        # PHROGs-based GFF + summary
 │   ├── phold/           # Structure-based GFF + summary
 │   └── phynteny/        # Synteny-annotated GenBank + summary
-└── 06_report/           # MultiQC HTML report
 ```

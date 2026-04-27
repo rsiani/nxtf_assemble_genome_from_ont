@@ -14,7 +14,7 @@ dependencies:
   - viralverify
   # Annotation
   - pharokka
-  - phold
+  # - phold
   # - phynteny
   # Reporting & utilities
   - multiqc

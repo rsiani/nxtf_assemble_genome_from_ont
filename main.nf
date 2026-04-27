@@ -41,7 +41,7 @@ process QC_TRIM {
 }
 
 // ============================================================
-// 2. Assembly: Flye (Standard Mode)
+// 2. Assembly: Flye 
 // ============================================================
 process ASSEMBLY {
     publishDir "${params.outdir}/02_assembly", mode: 'copy'
@@ -133,11 +133,11 @@ process VIRAL_VERIFY {
     path polished_assembly
 
     output:
-    path "viralverify_report.txt", emit: taxonomy_report
+    path "viralverify_out", emit: viralverify_dir
 
     script:
     """
-    viralverify -f ${polished_assembly} -o viralverify_report.txt --hmm ~/micromamba/envs/phage-pipeline/db/nbc_hmms.hmm
+    viralverify -f ${polished_assembly} -o viralverify_out --hmm ~/micromamba/envs/phage-pipeline/db/nbc_hmms.hmm
     """
 
     stub:
@@ -180,37 +180,37 @@ process PHAROKKA {
     """
 }
 
-// ============================================================
-// 6b. Structure-based Annotation: Phold
-// ============================================================
-process PHOLD {
-    publishDir "${params.outdir}/04_annotation/phold", mode: 'copy'
+// // ============================================================
+// // 6b. Structure-based Annotation: Phold
+// // ============================================================
+// process PHOLD {
+//     publishDir "${params.outdir}/04_annotation/phold", mode: 'copy'
 
-    input:
-    path gbk_file
+//     input:
+//     path gbk_file
 
-    output:
-    path "phold_out/phold.gff",         emit: phold_gff
-    path "phold_out/phold.gbk",         emit: phold_gbk
-    path "phold_out",                   emit: phold_dir
+//     output:
+//     path "phold_out/phold.gff",         emit: phold_gff
+//     path "phold_out/phold.gbk",         emit: phold_gbk
+//     path "phold_out",                   emit: phold_dir
 
-    script:
-    """
-    phold run \
-        -i ${gbk_file} \
-        -o phold_out \
-        -t ${task.cpus} \
-        -f
-    """
+//     script:
+//     """
+//     phold run \
+//         -i ${gbk_file} \
+//         -o phold_out \
+//         -t ${task.cpus} \
+//         -f
+//     """
 
-    stub:
-    """
-    mkdir -p phold_out
-    printf '##gff-version 3\\nviral_contig_1\\tphold\\tCDS\\t1\\t500\\t.\\t+\\t0\\tID=CDS_1;function=tail fiber protein (3D)\\n' \
-        > phold_out/phold.gff
-    cp ${gbk_file} phold_out/phold.gbk
-    """
-}
+//     stub:
+//     """
+//     mkdir -p phold_out
+//     printf '##gff-version 3\\nviral_contig_1\\tphold\\tCDS\\t1\\t500\\t.\\t+\\t0\\tID=CDS_1;function=tail fiber protein (3D)\\n' \
+//         > phold_out/phold.gff
+//     cp ${gbk_file} phold_out/phold.gbk
+//     """
+// }
 
 // // ============================================================
 // // 6c. Synteny-based Context: Phynteny
@@ -245,43 +245,6 @@ process PHOLD {
 // }
 
 // ============================================================
-// 6. Report: MultiQC
-// ============================================================
-process REPORT {
-    tag "multiqc"
-    publishDir "${params.outdir}/05_report", mode: 'copy'
-
-    input:
-    path qc_report
-    path qc_report_json
-    path checkv_results
-    path taxonomy_report  
-    // path phynteny_summary
-
-    output:
-    path "multiqc_out/multiqc_report.html", emit: final_report
-
-    script:
-    """
-    multiqc . -o multiqc_out
-    """
-
-    stub:
-    """
-    mkdir -p multiqc_out
-    cat <<'EOF' > multiqc_out/multiqc_report.html
-    <html>
-    <body>
-        <h1>Stub MultiQC Report</h1>
-        <p>All steps completed successfully (stub mode).</p>
-        <p>Includes: QC, CheckV, ViralVerify, Pharokka, Phold, Phynteny</p>
-    </body>
-    </html>
-    EOF
-    """
-}
-
-// ============================================================
 // Workflow
 // ============================================================
 workflow {
@@ -307,16 +270,8 @@ workflow {
 
     // 5. Annotation Chain
     pharokka_out = PHAROKKA(polish_out.polished_assembly)
-    phold_out    = PHOLD(pharokka_out.pharokka_gbk)
+    // phold_out    = PHOLD(pharokka_out.pharokka_gbk)
     // phynteny_out = PHYNTENY(phold_out.phold_gbk)
-
-    // 6. Report
-    report_out   = REPORT(
-        qc_out.qc_report,
-        qc_out.qc_report_json,
-        checkv_out.checkv_results,
-        verify_out.taxonomy_report
-    )
 
     report_out.final_report.view { path ->
         """
