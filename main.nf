@@ -35,8 +35,8 @@ process QC_TRIM {
     stub:
     """
     echo "Dummy trimmed content" | gzip > ${reads.baseName}_trimmed.fastq.gz
-    echo "<html><body>Stub QC Report</body></html>" > fastplong_report.html
-    echo '{"summary": "stub"}' > fastplong_report.json
+    echo "<html><body>Stub QC Report</body></html>" > fastplong.html
+    echo '{"summary": "stub"}' > fastplong.json
     """
 }
 
@@ -273,12 +273,5 @@ workflow {
     // phold_out    = PHOLD(pharokka_out.pharokka_gbk)
     // phynteny_out = PHYNTENY(phold_out.phold_gbk)
 
-    report_out.final_report.view { path ->
-        """
-        =========================================
-        Pipeline completed!
-        Report: ${path}
-        =========================================
-        """
-    }
+    
 }
