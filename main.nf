@@ -1,31 +1,15 @@
 // main.nf
 // Nextflow Pipeline for Phage Assembly
 // Usage: 
-//   Real run:  nextflow run main.nf --inputFile reads.fastq -profile conda
-//   Test run:  nextflow run main.nf --inputFile reads.fastq -profile conda -stub
+//   Real run:  nextflow run main.nf --inputFile reads.fastq
+//   Test run:  nextflow run main.nf --inputFile reads.fastq -stub
 
 // --- Parameters ---
 params.inputFile = null
 params.outdir = './results'
 
-// --- Process Configuration ---
-process {
-    // Enable conda
-    conda = true
-    condaEnvironment = "${projectDir}/environment.yml"
-    
-    // Default resources
-    cpus = 4
-    memory = '8 GB'
-    
-    // Error handling
-    errorStrategy = 'finish'
-    maxRetries = 1
-}
-
 // --- 1. QC & Trimming: fastplong ---
 process QC_TRIM {
-    tag "$sample"
     input:
     path reads
     
@@ -35,18 +19,14 @@ process QC_TRIM {
     path "fastplong_report.json", emit: qc_report_json
 
     script:
-    def sample = reads.simpleName
     """
-    fastplong -i ${reads} -o ${sample}_trimmed.fastq -A --min_len 500 --threads ${task.cpus}
-    gzip -c ${sample}_trimmed.fastq > ${sample}_trimmed.fastq.gz
+    fastplong -i ${reads} -o ${reads.baseName}_trimmed.fastq.gz --n_base_limit 500 --thread ${task.cpus}
     """
 
     stub:
-    def sample = reads.simpleName
     """
     echo "[STUB] Running fastplong on ${reads}"
-    echo "Dummy trimmed content" > ${sample}_trimmed.fastq
-    gzip -c ${sample}_trimmed.fastq > ${sample}_trimmed.fastq.gz
+    echo "Dummy trimmed content" > ${reads.baseName}_trimmed.fastq.gz
     echo "<html><body>Stub QC Report</body></html>" > fastplong_report.html
     echo '{"summary": "stub"}' > fastplong_report.json
     """
@@ -54,7 +34,6 @@ process QC_TRIM {
 
 // --- 2. Assembly: metaFlye ---
 process ASSEMBLY {
-    tag "$sample"
     input:
     path trimmed_reads
     
@@ -79,10 +58,9 @@ process ASSEMBLY {
 
 // --- 3. Viral Refinement: viralFlye ---
 process VIRAL_FLYE {
-    tag "$sample"
     input:
     path flye_dir
-    path reads
+    path trimmed_reads
     
     output:
     path "viralflye_out/components_viralFlye.fasta", emit: final_assembly
@@ -95,7 +73,7 @@ process VIRAL_FLYE {
         echo "Downloading Pfam-A.hmm.gz..."
         wget -q ftp://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz
     fi
-    viralFlye.py --dir ${flye_dir} --hmm Pfam-A.hmm.gz --reads ${reads} --outdir viralflye_out
+    viralFlye.py --dir ${flye_dir} --hmm Pfam-A.hmm.gz --reads ${trimmed_reads} --outdir viralflye_out
     """
 
     stub:
@@ -111,7 +89,6 @@ process VIRAL_FLYE {
 
 // --- 4. Validation: CheckV ---
 process CHECKV {
-    tag "$sample"
     input:
     path final_assembly
     
@@ -134,7 +111,6 @@ process CHECKV {
 
 // --- 5. Validation: BUSCO ---
 process BUSCO {
-    tag "$sample"
     input:
     path final_assembly
     
@@ -157,7 +133,6 @@ process BUSCO {
 
 // --- 6. Reporting: MultiQC ---
 process REPORT {
-    tag "$sample"
     input:
     path qc_report
     path qc_report_json
@@ -165,7 +140,7 @@ process REPORT {
     path busco_report
     
     output:
-    path "multiqc_report.html", emit: final_report
+    path "multiqc_out/multiqc_report.html", emit: final_report
 
     script:
     """
@@ -182,25 +157,41 @@ process REPORT {
 
 // --- Workflow Definition ---
 workflow {
+    // 1. Validate Input Parameter exists
     if (!params.inputFile) {
         error "Please provide an input file using --inputFile <path_to_fastq>"
     }
 
-    // Channel from input file
-    Channel.fromPath(params.inputFile)
-        .map { file -> [file.simpleName, file] }
+    // 2. Define Input Channel
+    // 'checkIfExists: true' ensures we fail early if the path is wrong
+    Channel.fromPath(params.inputFile, checkIfExists: true)
         .set { samples }
 
-    // Execute processes
-    samples { |sample, reads|
-        QC_TRIM(reads)
-        ASSEMBLY(QC_TRIM.trimmed_reads)
-        VIRAL_FLYE(ASSEMBLY.assembly, QC_TRIM.trimmed_reads)
-        CHECKV(VIRAL_FLYE.final_assembly)
-        BUSCO(VIRAL_FLYE.final_assembly)
-        REPORT(QC_TRIM.qc_report, QC_TRIM.qc_report_json, CHECKV.checkv_results, BUSCO.busco_report)
-        
-        // Optional: Print final report path to console
-        REPORT.final_report.view { "Pipeline finished! Report available at: $it" }
+    // 3. Invoke Processes
+    qc_results = QC_TRIM(samples)
+    trimmed_reads_ch = qc_results.trimmed_reads
+    qc_report_ch = qc_results.qc_report
+    qc_json_ch = qc_results.qc_report_json
+
+    asm_results = ASSEMBLY(trimmed_reads_ch)
+    assembly_ch = asm_results.assembly
+
+    viral_results = VIRAL_FLYE(assembly_ch, trimmed_reads_ch)
+    final_assembly_ch = viral_results.final_assembly
+
+    checkv_results = CHECKV(final_assembly_ch)
+    checkv_out_ch = checkv_results.checkv_results
+
+    busco_results = BUSCO(final_assembly_ch)
+    busco_report_ch = busco_results.busco_report
+
+    report_results = REPORT(qc_report_ch, qc_json_ch, checkv_out_ch, busco_report_ch)
+    
+    // 4. Final Output
+    report_results.final_report.view { report_path -> 
+        println "========================================="
+        println "Pipeline completed successfully!"
+        println "Final Report: $report_path"
+        println "========================================="
     }
 }

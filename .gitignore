@@ -3,3 +3,4 @@ work/
 *.log
 .conda/
 .micromamba/
+.vscode/
