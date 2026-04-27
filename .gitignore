@@ -1,6 +1,6 @@
 .nextflow/
 work/
-.nextflow.log*
+.nextflow.log.*
 .conda/
 .micromamba/
 .vscode/
