@@ -11,6 +11,7 @@ Nextflow pipeline for end-to-end processing of Oxford Nanopore phage isolate rea
 | 3 | Polishing | Medaka | Refined contigs |
 | 4 | Assembly QC | CheckV + viralVerify | Completeness / contamination |
 | 5 | Annotation | Pharokka → Phold → Phynteny | GFF, PHROGs functions, structure-based calls, synteny context |
+| 6 | Report | Python/ReportLab | PDF report with methods and results |
 
 ## Requirements
 
@@ -50,4 +51,5 @@ results/
 │   ├── pharokka/        # PHROGs-based GFF + summary
 │   ├── phold/           # Structure-based GFF + summary
 │   └── phynteny/        # Synteny-annotated GenBank + summary
+└── 05_report/           # PDF report with methods and results
 ```

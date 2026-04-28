@@ -103,13 +103,13 @@ process POLISH {
 // 4. Assembly QC: CheckV
 // ============================================================
 process CHECKV {
-    publishDir "${params.outdir}/03_qc/checkv", mode: 'copy'
+    publishDir "${params.outdir}/03_qc", mode: 'copy'
 
     input:
     path polished_assembly
 
     output:
-    path "checkv_out/*", emit: checkv_results
+    path "checkv_out", emit: checkv_results
 
     script:
     """
@@ -127,7 +127,7 @@ process CHECKV {
 // 5. Taxonomic Verification: ViralVerify
 // ============================================================
 process VIRAL_VERIFY {
-    publishDir "${params.outdir}/03_qc/viralverify", mode: 'copy'
+    publishDir "${params.outdir}/03_qc", mode: 'copy'
 
     input:
     path polished_assembly
@@ -151,7 +151,7 @@ process VIRAL_VERIFY {
 // 6a. Phage Annotation: Pharokka
 // ============================================================
 process PHAROKKA {
-    publishDir "${params.outdir}/04_annotation/", mode: 'copy'
+    publishDir "${params.outdir}/04_annotation", mode: 'copy'
 
     input:
     path polished_assembly
@@ -244,6 +244,195 @@ process PHAROKKA {
 //     """
 // }
 
+// // ============================================================
+// // 7. Generate PDF Report
+// // ============================================================
+// process GENERATE_REPORT {
+//     publishDir "${params.outdir}/05_report", mode: 'copy'
+
+//     input:
+//     path qc_json
+//     path assembly_info
+//     path checkv_results
+//     path viralverify_dir
+//     path pharokka_dir
+
+//     output:
+//     path "phage_analysis_report.pdf", emit: pdf_report
+
+//     script:
+//     """
+//     #!/usr/bin/env python3
+//     from reportlab.lib.pagesizes import letter
+//     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+//     from reportlab.lib.units import inch
+//     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+//     from reportlab.lib import colors
+//     from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+//     import json
+//     import os
+//     from datetime import datetime
+
+//     # Read input data
+//     qc_data = json.load(open("${qc_json}"))
+    
+//     # Parse CheckV results
+//     checkv_summary = None
+//     for f in os.listdir("${checkv_results}"):
+//         if "quality_summary" in f:
+//             checkv_summary = f
+//             break
+    
+//     # Parse Pharokka summary
+//     pharokka_summary = None
+//     for f in os.listdir("${pharokka_dir}"):
+//         if f.endswith("_cds_functions.tsv"):
+//             pharokka_summary = f
+//             break
+
+//     # Create PDF
+//     doc = SimpleDocTemplate("phage_analysis_report.pdf", pagesize=letter,
+//                            rightMargin=72, leftMargin=72,
+//                            topMargin=72, bottomMargin=18)
+    
+//     story = []
+//     styles = getSampleStyleSheet()
+    
+//     # Custom styles
+//     title_style = ParagraphStyle(
+//         'CustomTitle',
+//         parent=styles['Heading1'],
+//         fontSize=24,
+//         textColor=colors.HexColor('#1a1a1a'),
+//         spaceAfter=30,
+//         alignment=TA_CENTER
+//     )
+    
+//     heading_style = ParagraphStyle(
+//         'CustomHeading',
+//         parent=styles['Heading2'],
+//         fontSize=14,
+//         textColor=colors.HexColor('#2c5aa0'),
+//         spaceAfter=12,
+//         spaceBefore=12
+//     )
+    
+//     # Title
+//     story.append(Paragraph("Phage Isolate Analysis Report", title_style))
+//     story.append(Spacer(1, 0.2*inch))
+    
+//     # Metadata
+//     date_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+//     story.append(Paragraph(f"<b>Date:</b> {date_str}", styles['Normal']))
+//     story.append(Paragraph(f"<b>Input File:</b> ${params.inputFile}", styles['Normal']))
+//     story.append(Spacer(1, 0.3*inch))
+    
+//     # Methods Section
+//     story.append(Paragraph("Methods", heading_style))
+//     methods_text = \"\"\"
+//     <b>Quality Control:</b> Raw Oxford Nanopore reads were processed using fastplong 
+//     to remove adapters and low-quality bases (N-base limit: 500).
+//     <br/><br/>
+//     <b>Assembly:</b> Trimmed reads were assembled using Flye v2.9 in metagenomic mode 
+//     (--meta) with the --nano-corr preset for error-corrected reads.
+//     <br/><br/>
+//     <b>Polishing:</b> The draft assembly was polished using Medaka consensus calling 
+//     to correct remaining errors in homopolymer regions and improve base accuracy.
+//     <br/><br/>
+//     <b>Quality Assessment:</b> Viral completeness and contamination were assessed using 
+//     CheckV v1.5. Taxonomic verification was performed with viralVerify to confirm 
+//     viral origin and predict taxonomic classification.
+//     <br/><br/>
+//     <b>Functional Annotation:</b> Gene calling and functional annotation were performed 
+//     using Pharokka, which identifies coding sequences and assigns functions based on 
+//     the PHROGs database of phage orthologous groups.
+//     \"\"\"
+//     story.append(Paragraph(methods_text, styles['Normal']))
+//     story.append(PageBreak())
+    
+//     # Results Section
+//     story.append(Paragraph("Results", heading_style))
+    
+//     # QC Stats
+//     story.append(Paragraph("<b>1. Quality Control Summary</b>", styles['Heading3']))
+//     qc_table_data = [
+//         ["Metric", "Value"],
+//         ["Total Reads", str(qc_data.get("total_reads", "N/A"))],
+//         ["Total Bases", str(qc_data.get("total_bases", "N/A"))],
+//         ["Mean Read Length", str(qc_data.get("mean_length", "N/A"))],
+//         ["Mean Quality", str(qc_data.get("mean_quality", "N/A"))]
+//     ]
+//     qc_table = Table(qc_table_data, colWidths=[3*inch, 2*inch])
+//     qc_table.setStyle(TableStyle([
+//         ('BACKGROUND', (0,0), (-1,0), colors.grey),
+//         ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),
+//         ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+//         ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+//         ('FONTSIZE', (0,0), (-1,0), 12),
+//         ('BOTTOMPADDING', (0,0), (-1,0), 12),
+//         ('BACKGROUND', (0,1), (-1,-1), colors.beige),
+//         ('GRID', (0,0), (-1,-1), 1, colors.black)
+//     ]))
+//     story.append(qc_table)
+//     story.append(Spacer(1, 0.3*inch))
+    
+//     # Assembly Stats
+//     story.append(Paragraph("<b>2. Assembly Statistics</b>", styles['Heading3']))
+//     assembly_text = "Assembly completed successfully. See assembly_info.txt for contig-level details."
+//     story.append(Paragraph(assembly_text, styles['Normal']))
+//     story.append(Spacer(1, 0.2*inch))
+    
+//     # CheckV Results
+//     if checkv_summary:
+//         story.append(Paragraph("<b>3. Viral Quality Assessment (CheckV)</b>", styles['Heading3']))
+//         checkv_path = os.path.join("${checkv_results}", checkv_summary)
+//         with open(checkv_path) as f:
+//             lines = f.readlines()
+//             if len(lines) > 1:
+//                 header = lines[0].strip().split('\\t')[:5]  # First 5 columns
+//                 data = lines[1].strip().split('\\t')[:5]
+//                 checkv_table_data = [header, data]
+//                 checkv_table = Table(checkv_table_data)
+//                 checkv_table.setStyle(TableStyle([
+//                     ('BACKGROUND', (0,0), (-1,0), colors.grey),
+//                     ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),
+//                     ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+//                     ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+//                     ('FONTSIZE', (0,0), (-1,-1), 10),
+//                     ('GRID', (0,0), (-1,-1), 1, colors.black)
+//                 ]))
+//                 story.append(checkv_table)
+//     story.append(Spacer(1, 0.3*inch))
+    
+//     # Pharokka Results
+//     if pharokka_summary:
+//         story.append(Paragraph("<b>4. Functional Annotation (Pharokka)</b>", styles['Heading3']))
+//         pharokka_path = os.path.join("${pharokka_dir}", pharokka_summary)
+//         with open(pharokka_path) as f:
+//             total_cds = sum(1 for line in f) - 1  # minus header
+//         story.append(Paragraph(f"Total CDS predicted: {total_cds}", styles['Normal']))
+//         story.append(Paragraph("See pharokka output directory for detailed gene annotations and functional categories.", styles['Normal']))
+    
+//     # Build PDF
+//     doc.build(story)
+//     """
+
+//     stub:
+//     """
+//     #!/usr/bin/env python3
+//     from reportlab.lib.pagesizes import letter
+//     from reportlab.platypus import SimpleDocTemplate, Paragraph
+//     from reportlab.lib.styles import getSampleStyleSheet
+    
+//     doc = SimpleDocTemplate("phage_analysis_report.pdf", pagesize=letter)
+//     story = []
+//     styles = getSampleStyleSheet()
+//     story.append(Paragraph("STUB: Phage Analysis Report", styles['Title']))
+//     story.append(Paragraph("This is a stub report for testing.", styles['Normal']))
+//     doc.build(story)
+//     """
+// }
+
 // ============================================================
 // Workflow
 // ============================================================
@@ -273,5 +462,22 @@ workflow {
     // phold_out    = PHOLD(pharokka_out.pharokka_gbk)
     // phynteny_out = PHYNTENY(phold_out.phold_gbk)
 
+    // // 6. Generate Report
+    // report_out = GENERATE_REPORT(
+    //     qc_out.qc_report_json,
+    //     asm_out.assembly_info,
+    //     checkv_out.checkv_results,
+    //     verify_out.viralverify_dir,
+    //     pharokka_out.pharokka_dir
+    // )
+
+    // report_out.pdf_report.view { path ->
+    //     """
+    //     =========================================
+    //     Pipeline completed!
+    //     PDF Report: ${path}
+    //     =========================================
+    //     """
+    // }
     
 }

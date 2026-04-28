@@ -19,3 +19,5 @@ dependencies:
   # Reporting & utilities
   - multiqc
   - wget
+  - python=3.12
+  - reportlab
