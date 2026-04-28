@@ -4,5 +4,4 @@ work/
 .micromamba/
 .vscode/
 results/
-*qmd
-*html
+*presentation*
